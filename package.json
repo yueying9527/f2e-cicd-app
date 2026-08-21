@@ -2,6 +2,19 @@
   "name": "f2e-cicd-app",
   "version": "0.0.0",
   "private": true,
+  "homepage": "https://github.com/yueying9527/f2e-cicd-app#readme",
+  "bugs": {
+    "url": "https://github.com/yueying9527/f2e-cicd-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yueying9527/f2e-cicd-app.git"
+  },
+  "funding": "https://github.com/sponsors/yueying9527",
+  "author": {
+    "name": "jinyalong",
+    "email": "a1107800582@gmail.com"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,17 +23,33 @@
     "test:unit": "vitest",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
-    "lint": "run-s \"lint:*\"",
+    "lint": "eslint . && stylelint --allow-empty-input \"**/*.{css,less,scss}\"",
     "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
-    "format": "oxfmt src/"
+    "format": "oxfmt src/",
+    "ci:eslint": "eslint -f json src -o ./.ci/eslint.json",
+    "lint:fix": "prettier --write . && eslint --fix . && stylelint --allow-empty-input --fix \"**/*.{css,less,scss}\"",
+    "prepare": "husky"
   },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{cjs,cts,js,jsx,mjs,mts,ts,tsx,vue}": "eslint --fix",
+    "*.{css,less,scss}": "stylelint --fix",
+    "*.{cjs,css,cts,html,js,json,jsx,less,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}": "prettier --write"
+  },
+  "prettier": "prettier-config-ali",
   "dependencies": {
     "pinia": "^4.0.2",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
     "@tsconfig/node24": "^24.0.4",
     "@types/jsdom": "^28.0.3",
     "@types/node": "^24.13.3",
@@ -29,15 +58,23 @@
     "@vue/eslint-config-typescript": "^14.9.0",
     "@vue/test-utils": "^2.4.11",
     "@vue/tsconfig": "^0.9.1",
-    "eslint": "^10.7.0",
+    "eslint": "^9.39.4",
+    "eslint-config-ali": "^16.6.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-oxlint": "~1.73.0",
-    "eslint-plugin-vue": "~10.9.2",
+    "eslint-plugin-prettier": "^5.5.6",
+    "husky": "^9.1.7",
     "jiti": "^2.7.0",
     "jsdom": "^29.1.1",
+    "lint-staged": "^16.4.0",
     "npm-run-all2": "^9.0.2",
     "oxfmt": "^0.59.0",
     "oxlint": "~1.74.0",
+    "prettier": "^3.9.6",
+    "prettier-config-ali": "^1.5.0",
+    "stylelint": "^17.14.1",
+    "stylelint-config-ali": "^3.0.0",
+    "stylelint-prettier": "^5.0.3",
     "typescript": "~6.0.0",
     "vite": "^8.1.5",
     "vite-plugin-vue-devtools": "^8.1.5",
