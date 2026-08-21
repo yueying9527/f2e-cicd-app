@@ -6,6 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools';
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: process.env.NODE_ENV === 'production' ? '/f2e-cicd-app/' : '/',
   plugins: [vue(), vueDevTools()],
   resolve: {
     alias: {

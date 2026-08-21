@@ -1,6 +1,9 @@
 # f2e-cicd-app
 
-This template should help get you started developing with Vue 3 in Vite.
+[![CI/CD Pipeline](https://github.com/yueying9527/f2e-cicd-app/actions/workflows/deploy.yml/badge.svg)](https://github.com/yueying9527/f2e-cicd-app/actions/workflows/deploy.yml)
+[![GitHub Pages](https://img.shields.io/badge/Live_Demo-GitHub_Pages-2ea44f?logo=github)](https://yueying9527.github.io/f2e-cicd-app/)
+
+> 基于 Vue 3 + Vite + TypeScript 的现代化前端工程化与 CI/CD 持续集成/持续部署学习实践。
 
 ## Recommended IDE Setup
 

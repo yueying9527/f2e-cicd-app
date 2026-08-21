@@ -1,0 +1,80 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# 设置权限以允许 GitHub Pages 部署
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 限制并发部署，避免冲突
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  # ==========================================
+  # 阶段 1：持续集成 (CI - Continuous Integration)
+  # ==========================================
+  ci:
+    name: 🛡️ Code Quality & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: 配置 Node.js 与 pnpm 缓存
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: 安装项目依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 运行代码规约检查 (Lint)
+        run: pnpm lint
+
+      - name: 运行 TypeScript 类型检查 (Type Check)
+        run: pnpm type-check
+
+      - name: 运行自动化单元测试 (Unit Test)
+        run: pnpm test:unit
+
+      - name: 打包构建生产产物 (Build)
+        run: pnpm build
+
+      - name: 上传 GitHub Pages 构建产物
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+  # ==========================================
+  # 阶段 2：持续部署 (CD - Continuous Deployment)
+  # ==========================================
+  deploy:
+    name: 🚀 Deploy to GitHub Pages
+    needs: ci
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
